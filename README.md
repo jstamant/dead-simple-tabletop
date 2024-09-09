@@ -29,9 +29,9 @@ Low priority:
 
 ## Technologies
 
-On the frontend, I'll be using React.
+On the frontend, I'll be using React and Next.js
 
-On the backend, I'll be using Rust.
+On the backend, I'll be using Rust. Specifically, I'll be using axum, because it is tightly integrated with the Tokio project, an important async engine in Rust.
 
 For the DBMS, I'll be using PostgreSQL.
 
