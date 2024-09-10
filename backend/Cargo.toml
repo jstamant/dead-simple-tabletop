@@ -1,0 +1,11 @@
+[package]
+name = "backend"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+axum = "0.7.5"
+serde = { version = "1.0.210", features = ["derive"] }
+sqlx = "0.8.2"
+tokio = { version = "1.40.0", features = ["rt-multi-thread"] }
+tracing-subscriber = "0.3.18" # Not sure if this is necessary...or what it does
