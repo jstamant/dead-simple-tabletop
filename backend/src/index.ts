@@ -1,4 +1,7 @@
-import express from 'express'
+//import express from 'express'
+import express, { Request, Response } from 'express'
+// const express = require('express');
+// import { Request, Response } from 'express';
 const app = express()
 const port = process.env.PORT || 3001
 
@@ -7,7 +10,7 @@ const port = process.env.PORT || 3001
 app.use(express.json())
 
 
-app.get('/', (_req, res) => {
+app.get('/', (_req: Request, res: Response) => {
   res.send('Hello World!')
 })
 
@@ -26,22 +29,8 @@ app.post('/user', (req, res) => {
   res.status(400).send(req.body);
 })
 
-app.get('/sheet', (_req, res) => {
-  console.log('getting the default sheet');
-  res.send('getting the default sheet');
-})
-
-app.post('/sheet', (_req, res) => {
-  const message = 'creating a sheet!';
-  console.log(message);
-  res.send(message);
-})
-
-app.get('/sheet/:id', (req, res) => {
-  const message = `getting the sheet with id ${req.params.id}`;
-  console.log(message);
-  res.send(message);
-})
+import sheet from './controllers/sheet'
+app.use('/sheet', sheet);
 
 app.get('/game', (_req, res) => {
   const message = 'getting the default game';
@@ -62,5 +51,6 @@ app.get('/game/:id', (req, res) => {
 })
 
 app.listen(port, () => {
-  console.log(`Backend listening on port ${port}`)
+  console.log(`Backend listening on port ${port}`);
+  console.log(`NODE_ENV is ${process.env.NODE_ENV}`);
 })
