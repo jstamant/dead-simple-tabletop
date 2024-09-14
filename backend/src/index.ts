@@ -1,27 +1,58 @@
-//import express from 'express'
-import express, { Request, Response } from 'express'
-// const express = require('express');
-// import { Request, Response } from 'express';
+// require('dotenv').config();
+import 'dotenv/config'
+console.log(process.env.SECRET)
+import { Secret } from 'jsonwebtoken'
+const secret: Secret = process.env.SECRET
+console.log(secret)
+
+import express from 'express'
+import bcrypt from 'bcrypt'
+import jwt from 'jsonwebtoken'
+
 const app = express()
 const port = process.env.PORT || 3001
+
 
 // TODO process.env.NODE_ENV == 'test'
 
 app.use(express.json())
 
 
-app.get('/', (_req: Request, res: Response) => {
+app.get('/', (_req, res) => {
   res.send('Hello World!')
 })
 
 app.post('/login', (req, res) => {
-  if (!('user' in req.body && 'password' in req.body)) {
-    return res.status(400).end();
+  const { username, password } = req.body
+  // TODO there should be some validation at the start, here
+  // if (!('user' in req.body && 'password' in req.body)) {
+  //   return res.status(400).end();
+  // }
+  // const user = await User.findOne({ username })
+  // const isPasswordCorrect = user === null
+  //   ? false
+  //   : await bcrypt.compare(password, user.password)
+  // if (!user || !isPasswordCorrect) {
+  //   const error = new Error('Invalid username or password')
+  //   error.name = 'InvalidCredentials'
+  //   return next(error)
+  // }
+  const payload = {
+    // username: user.username,
+    // id: user._id
+    username,
+    id: 1001
   }
-  if (req.body.user === 'admin' && req.body.password === 'test') {
-    res.status(201).send('supposed to send an id, or something');
+  const token = jwt.sign(
+    payload,
+    process.env.SECRET,
+    { expiresIn: 60*60 }
+  )
+  if (username !== 'admin' || password !== 'test') {
+    return res.status(401).end();
   }
-  res.status(401).send(req.body);
+  res.status(200).json({ username, token });
+  // response.status(200).json({ username: user.username, token })
 })
 
 app.post('/user', (req, res) => {
