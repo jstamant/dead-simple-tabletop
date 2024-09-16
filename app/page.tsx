@@ -4,11 +4,12 @@ import Link from 'next/link';
 
 import axios from 'axios';
 
-import {Button} from '@nextui-org/button'
+import {Button} from '@nextui-org/react'
+import {PressEvent} from '@react-types/shared'
 
 export default function Home() {
-  const handleTest = (event) => {
-    event.preventDefault();
+  const handleTest = (e: PressEvent) => {
+    console.log(e)
     console.log('button clicked!')
     axios.post('http://localhost:3001/login');
   }
@@ -25,7 +26,7 @@ export default function Home() {
           <input id="password" type="password" />
           <button type="submit" onClick={handleTest}>Log in?</button>
         </form>
-        <Button>Testing button from nextui</Button>
+        <Button onPress={handleTest}>Testing button from nextui</Button>
       </main>
       <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
         <p>This is the footer.</p>
