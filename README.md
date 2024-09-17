@@ -38,3 +38,17 @@ On the backend, I'll be using Rust. Specifically, I'll be using axum, because it
 For the DBMS, I'll be using PostgreSQL.
 
 For the frontend within games/tables, I think I might use WebGL, which might be a better choice for VTT features down the line, like the dice-roller. But I might equally just use React for simplicity, to start.
+
+## Running
+
+To run the docker container
+
+``` sh
+docker pull postgres
+docker run --name dstt_postgres -e POSTGRES_PASSWORD=password -p 5432:5432 -d postgres
+docker ps
+docker exec -it dstt_postgres psql -U postgres
+docker stop dstt_postgres
+docker rm dstt_postgres
+docker logs dstt_postgres
+```
