@@ -1,13 +1,14 @@
 // require('dotenv').config();
 import 'dotenv/config'
-console.log(process.env.SECRET)
 import { Secret } from 'jsonwebtoken'
-const secret: Secret = process.env.SECRET
-console.log(secret)
+// TODO should throw an error if there's no secret set??
+const secret: Secret = process.env.SECRET || 'test'
 
 import express from 'express'
-import bcrypt from 'bcrypt'
+// import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
+
+import sql from '../util/db'
 
 const app = express()
 const port = process.env.PORT || 3001
@@ -45,7 +46,7 @@ app.post('/login', (req, res) => {
   }
   const token = jwt.sign(
     payload,
-    process.env.SECRET,
+    secret,
     { expiresIn: 60*60 }
   )
   if (username !== 'admin' || password !== 'test') {
@@ -55,8 +56,10 @@ app.post('/login', (req, res) => {
   // response.status(200).json({ username: user.username, token })
 })
 
-app.post('/user', (req, res) => {
-  console.log('adding a user!');
+app.post('/user', async (req, res) => {
+  console.log('creating a user!');
+  const user = await sql`select * from users limit 1`;
+  console.log(user);
   res.status(400).send(req.body);
 })
 
