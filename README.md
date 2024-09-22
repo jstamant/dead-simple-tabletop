@@ -48,6 +48,7 @@ docker pull postgres
 docker run --name dstt_postgres -e POSTGRES_PASSWORD=password -p 5432:5432 -d postgres
 docker ps
 docker exec -it dstt_postgres psql -U postgres
+docker start dstt_postgres
 docker stop dstt_postgres
 docker rm dstt_postgres
 docker logs dstt_postgres

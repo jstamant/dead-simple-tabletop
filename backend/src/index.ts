@@ -5,7 +5,7 @@ import { Secret } from 'jsonwebtoken'
 const secret: Secret = process.env.SECRET || 'test'
 
 import express from 'express'
-// import bcrypt from 'bcrypt'
+import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 
 import sql from '../util/db'
@@ -23,44 +23,44 @@ app.get('/', (_req, res) => {
   res.send('Hello World!')
 })
 
-app.post('/login', (req, res) => {
+app.post('/login', async (req, res) => {
   const { username, password } = req.body
   // TODO there should be some validation at the start, here
-  // if (!('user' in req.body && 'password' in req.body)) {
-  //   return res.status(400).end();
-  // }
-  // const user = await User.findOne({ username })
-  // const isPasswordCorrect = user === null
-  //   ? false
-  //   : await bcrypt.compare(password, user.password)
-  // if (!user || !isPasswordCorrect) {
-  //   const error = new Error('Invalid username or password')
-  //   error.name = 'InvalidCredentials'
-  //   return next(error)
-  // }
+  // I need to figure out how I want to do validation
+  if (!('username' in req.body && 'password' in req.body)) {
+    return res.status(400).end();
+  }
+  const user = (await sql`SELECT * FROM users WHERE email = ${username}`)[0];
+  if (!user) {
+    return res.status(401).end();
+  }
+  const isPasswordCorrect = await bcrypt.compare(password, user.password_hash);
+  if (!isPasswordCorrect) {
+    return res.status(401).end();
+  }
   const payload = {
-    // username: user.username,
-    // id: user._id
-    username,
-    id: 1001
+    username: user.email,
+    id: user.id
   }
   const token = jwt.sign(
     payload,
     secret,
     { expiresIn: 60*60 }
   )
-  if (username !== 'admin' || password !== 'test') {
-    return res.status(401).end();
-  }
-  res.status(200).json({ username, token });
-  // response.status(200).json({ username: user.username, token })
+  sql`UPDATE users SET last_login = now() WHERE id = ${user.id}`.execute();
+  res.status(200).json({ username: user.email, token });
 })
 
+// TODO this endpoint is still rough
 app.post('/user', async (req, res) => {
+  // TODO there should be some validation at the start, here
   console.log('creating a user!');
-  const user = await sql`select * from users limit 1`;
-  console.log(user);
-  res.status(400).send(req.body);
+  const { username, password } = req.body
+  const saltRounds = 10;
+  const hashedPassword = await bcrypt.hash(password, saltRounds);
+  await sql`INSERT INTO users (email, password_hash) VALUES (${username}, ${hashedPassword})`;
+  // TODO need to return of new user's ID
+  res.status(201).end();
 })
 
 import sheet from './controllers/sheet'
