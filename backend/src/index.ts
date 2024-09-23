@@ -4,8 +4,9 @@ import { Secret } from 'jsonwebtoken'
 // TODO should throw an error if there's no secret set??
 const secret: Secret = process.env.SECRET || 'test'
 
-import express from 'express'
 import bcrypt from 'bcrypt'
+import cors from 'cors'
+import express from 'express'
 import jwt from 'jsonwebtoken'
 
 import sql from '../util/db'
@@ -13,9 +14,10 @@ import sql from '../util/db'
 const app = express()
 const port = process.env.PORT || 3001
 
+// TODO make this more selective, allows cors from anywhere! uh oh
+app.use(cors());
 
 // TODO process.env.NODE_ENV == 'test'
-
 app.use(express.json())
 
 
