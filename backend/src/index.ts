@@ -7,6 +7,7 @@ const secret: Secret = process.env.SECRET || 'test'
 import bcrypt from 'bcrypt'
 import cors from 'cors'
 import express from 'express'
+import 'express-async-errors';
 import jwt from 'jsonwebtoken'
 
 import sql from '../util/db'
