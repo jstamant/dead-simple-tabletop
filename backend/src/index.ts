@@ -65,7 +65,6 @@ app.post('/login', async (req, res) => {
 //
 // Route that requires JWT verification
 app.get('/protected', (req, res) => {
-  console.log(req.cookies);
   const token = req.cookies.token;  // Get the token from the cookie
   if (!token) return res.status(401).end();
   const user = jwt.verify(token, secret);
@@ -73,6 +72,7 @@ app.get('/protected', (req, res) => {
 });
 
 // TODO this endpoint is still rough
+// TODO change endpoints to /users???
 app.post('/user', async (req, res) => {
   // TODO there should be some validation at the start, here
   console.log('creating a user!');
@@ -84,8 +84,8 @@ app.post('/user', async (req, res) => {
   res.status(201).end();
 })
 
-import sheet from './controllers/sheet'
-app.use('/sheet', sheet);
+import sheets from './controllers/sheets'
+app.use('/sheets', sheets);
 
 app.get('/game', (_req, res) => {
   const message = 'getting the default game';

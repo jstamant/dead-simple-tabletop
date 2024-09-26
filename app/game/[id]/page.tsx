@@ -1,6 +1,6 @@
-// TODO this page should show the specific character sheet
+// TODO this page should show the specific game
 // should this use a hard id, or a user-specific id?
 
 export default function Page({ params }: { params: { id: number } }) {
-    return <div>My sheet id: {params.id}</div>
+    return <div>My game id: {params.id}</div>
 }
