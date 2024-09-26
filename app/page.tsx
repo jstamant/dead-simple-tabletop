@@ -1,18 +1,8 @@
-'use client'
-// TODO place client components in their own
 import Link from 'next/link';
 
-import axios from 'axios';
-
 import {Button} from '@nextui-org/button'
-import {PressEvent} from '@react-types/shared'
 
 export default function RootPage() {
-  const handleTest = (e: PressEvent) => {
-    console.log(e)
-    console.log('button clicked!')
-    axios.post('http://localhost:3001/login');
-  }
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
@@ -20,14 +10,6 @@ export default function RootPage() {
         <p>This might be a landing-page. Or it might be the app login page. Not sure.</p>
         <p>TODO replace this with a component like a log-in box.</p>
         <Link href="/dashboard">Go to the app?</Link>
-        <form>
-          <label htmlFor="user">User</label>
-          <input id="user" type="text" />
-          <label htmlFor="user">User</label>
-          <input id="password" type="password" />
-          <button type="submit" onClick={handleTest}>Log in?</button>
-        </form>
-        <Button onPress={handleTest}>Testing button from nextui</Button>
       </main>
       <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
         <p>This is the footer.</p>

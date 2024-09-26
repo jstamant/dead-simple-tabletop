@@ -5,6 +5,7 @@ import { Secret } from 'jsonwebtoken'
 const secret: Secret = process.env.SECRET || 'test'
 
 import bcrypt from 'bcrypt'
+import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import express from 'express'
 import 'express-async-errors';
@@ -12,11 +13,13 @@ import jwt from 'jsonwebtoken'
 
 import sql from '../util/db'
 
-const app = express()
 const port = process.env.PORT || 3001
 
+const app = express()
 // TODO make this more selective, allows cors from anywhere! uh oh
-app.use(cors());
+app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
+// TODO implement secret for cookie parser, and signed cookies
+app.use(cookieParser());
 
 // TODO process.env.NODE_ENV == 'test'
 app.use(express.json())
@@ -34,13 +37,9 @@ app.post('/login', async (req, res) => {
     return res.status(400).end();
   }
   const user = (await sql`SELECT * FROM users WHERE email = ${username}`)[0];
-  if (!user) {
-    return res.status(401).end();
-  }
+  if (!user) return res.status(401).end();
   const isPasswordCorrect = await bcrypt.compare(password, user.password_hash);
-  if (!isPasswordCorrect) {
-    return res.status(401).end();
-  }
+  if (!isPasswordCorrect) return res.status(401).end();
   const payload = {
     username: user.email,
     id: user.id
@@ -51,8 +50,27 @@ app.post('/login', async (req, res) => {
     { expiresIn: 60*60 }
   )
   sql`UPDATE users SET last_login = now() WHERE id = ${user.id}`.execute();
-  res.status(200).json({ username: user.email, token });
+  // Set the JWT as an HttpOnly cookie
+  res.cookie('token', token);
+  // res.cookie('token', token, {
+  //   httpOnly: true,  // Prevent access via JavaScript
+  //   secure: false, // this must be false for local development over http
+  //   // secure: process.env.NODE_ENV === 'production',  // Set to true if using HTTPS
+  //   sameSite: 'none',  // Prevent CSRF - nvm, bypassed with none, preffered to be set to 'strict'
+  //   maxAge: 3600000  // 1 hour in milliseconds
+  // });
+  res.send('')
+  // res.status(200).json({ username: user.email, token });
 })
+//
+// Route that requires JWT verification
+app.get('/protected', (req, res) => {
+  console.log(req.cookies);
+  const token = req.cookies.token;  // Get the token from the cookie
+  if (!token) return res.status(401).end();
+  const user = jwt.verify(token, secret);
+  res.json({ message: 'Protected data', user });
+});
 
 // TODO this endpoint is still rough
 app.post('/user', async (req, res) => {
@@ -89,5 +107,4 @@ app.get('/game/:id', (req, res) => {
 
 app.listen(port, () => {
   console.log(`Backend listening on port ${port}`);
-  console.log(`NODE_ENV is ${process.env.NODE_ENV}`);
 })
