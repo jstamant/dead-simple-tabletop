@@ -47,7 +47,7 @@ app.post('/login', async (req, res) => {
   const token = jwt.sign(
     payload,
     secret,
-    { expiresIn: 60*60 }
+    { expiresIn: 60*60 } // 1 hour
   )
   sql`UPDATE users SET last_login = now() WHERE id = ${user.id}`.execute();
   // Set the JWT as an HttpOnly cookie
@@ -62,18 +62,10 @@ app.post('/login', async (req, res) => {
   res.send('')
   // res.status(200).json({ username: user.email, token });
 })
-//
-// Route that requires JWT verification
-app.get('/protected', (req, res) => {
-  const token = req.cookies.token;  // Get the token from the cookie
-  if (!token) return res.status(401).end();
-  const user = jwt.verify(token, secret);
-  res.json({ message: 'Protected data', user });
-});
 
 // TODO this endpoint is still rough
 // TODO change endpoints to /users???
-app.post('/user', async (req, res) => {
+app.post('/users', async (req, res) => {
   // TODO there should be some validation at the start, here
   console.log('creating a user!');
   const { username, password } = req.body
@@ -84,7 +76,20 @@ app.post('/user', async (req, res) => {
   res.status(201).end();
 })
 
+const authentication = (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  console.log("CHECKING TOKEN");
+  const token = req.cookies.token;
+  if (!token) return res.status(401).end();
+  // TODO implement catching token expiry
+  req.user = jwt.verify(token, secret);
+  console.log("Token verified:", token)
+  console.log("req.user", req.user);
+  next();
+};
+
 import sheets from './controllers/sheets'
+// TODO should the authentication be at the router level??
+app.use('/sheets', authentication);
 app.use('/sheets', sheets);
 
 app.get('/game', (_req, res) => {

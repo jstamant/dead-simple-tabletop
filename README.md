@@ -29,6 +29,7 @@ Here's a general list of features I'd like to implement in this platform, roughl
 ### Future releases
 - Character sheet export to PDF
 - Payment and/or tipping
+- Sessions instead of per-request authentication?
 
 ## Technologies
 

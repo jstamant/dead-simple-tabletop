@@ -27,19 +27,14 @@ export default function Login() {
     const handleCreateAccount = (e: PressEvent) => {
         console.log(e)
         console.log('creating user account clicked!')
-        axios.post('/user', {username: email, password: password});
+        axios.post('/users', {username: email, password: password});
         clearFields();
     }
     const handleLogin = (e: PressEvent) => {
         console.log(e)
         console.log('login button clicked!')
-        axios.post('/login', {username: email, password: password}, { withCredentials: true });
+        axios.post('/login', {username: email, password: password});
         clearFields();
-    }
-    const handleTest = (e: PressEvent) => {
-        console.log(e)
-        console.log('test button clicked!')
-        axios.get('/protected', { withCredentials: true });
     }
     const clearFields = (): void => {
         setEmail('');
@@ -58,7 +53,6 @@ export default function Login() {
                 <Button className="w-1/2" onPress={handleLogin}>Login</Button>
                 <Button className="w-1/2" onPress={handleCreateAccount}>Create Account</Button>
             </CardFooter>
-                <Button className="w-1/2" onPress={handleTest}>test protected</Button>
         </Card>
     )
 }

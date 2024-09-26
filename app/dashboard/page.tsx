@@ -5,7 +5,7 @@ import {useEffect, useState} from 'react'
 
 import Link from 'next/link'
 import {Button} from '@nextui-org/button'
-import {Card, CardHeader, CardBody} from '@nextui-org/card'
+import {Card, CardHeader, CardBody, CardFooter} from '@nextui-org/card'
 
 import axios from '../../util/axios'
 
@@ -17,7 +17,7 @@ interface Sheet {
 export default function DashboardPage() {
     // TODO make a type for these
     const [sheets, setSheets] = useState<Sheet[]>([]);
-    const [games, setGames] = useState([]);
+    /* const [games, setGames] = useState([]); */
 
     useEffect(() => {
         console.log("refreshing sheets on mount?")
@@ -35,15 +35,17 @@ export default function DashboardPage() {
             <div>
                 <h1 className="text-2xl">Sheets</h1>
                 <Button onPress={handleAddSheet}>Add/create sheet</Button>
-                <Card>
-                    <CardHeader>list of sheets</CardHeader>
-                    <CardBody>
-                        {sheets.map((sheet) => {
-                            return <p key={sheet.id}>sheet #{sheet.id} with user_id{sheet.user_id}</p>
-                        })}
-                    </CardBody>
-                </Card>
-                <Link href="/sheet"><Button>goto sheet page (debug)</Button></Link>
+                <div className="flex">
+                    {sheets.map((sheet) => {
+                        return <Card key={sheet.id}>
+                            <CardHeader>sheet #{sheet.id}</CardHeader>
+                            <CardBody>user_id{sheet.user_id}</CardBody>
+                            <CardFooter>
+                                <Link href={`/sheet/${sheet.id}`}><Button>goto {sheet.id}</Button></Link>
+                            </CardFooter>
+                        </Card>
+                    })}
+                </div>
             </div>
             <div>
                 <h1 className="text-2xl">Games</h1>
