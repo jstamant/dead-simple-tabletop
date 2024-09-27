@@ -32,11 +32,21 @@ export default function DashboardPage() {
     }, []);
 
     const handleAddSheet = () => {
-        axios.post('/sheets');
+        axios.post('/sheets').then((res) => setSheets([...sheets, res.data]));
+    }
+    const handleDeleteSheet = (id: number) => {
+        return () => {
+            axios.delete(`/sheets/${id}`).then(() => setSheets(sheets.filter((sheet) => sheet.id != id)));
+        }
     }
 
     const handleAddGame = () => {
-        axios.post('/games');
+        axios.post('/games').then((res) => setGames([...games, res.data]));
+    }
+    const handleDeleteGame = (id: number) => {
+        return () => {
+            axios.delete(`/games/${id}`).then(() => setGames(games.filter((game) => game.id != id)));
+        }
     }
 
     return (
@@ -52,6 +62,7 @@ export default function DashboardPage() {
                             <CardBody>user_id{sheet.user_id}</CardBody>
                             <CardFooter>
                                 <Link href={`/sheet/${sheet.id}`}><Button>goto {sheet.id}</Button></Link>
+                                <Button onPress={handleDeleteSheet(sheet.id)}>delete</Button>
                             </CardFooter>
                         </Card>
                     })}
@@ -63,15 +74,15 @@ export default function DashboardPage() {
                 <div className="flex">
                     {games.map((game) => {
                         return <Card key={game.id} className="m-4">
-                            <CardHeader>sheet #{game.id}</CardHeader>
+                            <CardHeader>game #{game.id}</CardHeader>
                             <CardBody>user_id{game.user_id}</CardBody>
                             <CardFooter>
                                 <Link href={`/games/${game.id}`}><Button>goto {game.id}</Button></Link>
+                                <Button onPress={handleDeleteGame(game.id)}>delete</Button>
                             </CardFooter>
                         </Card>
                     })}
                 </div>
-                <Link href="/game"><Button>goto game page (debug)</Button></Link>
             </div>
         </div>
     )
