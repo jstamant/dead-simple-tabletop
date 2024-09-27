@@ -21,10 +21,12 @@ router.post('/', async (req, res) => {
 })
 
 // not done
-router.get('/:id', (req, res) => {
-  const message = `getting the sheet with id ${req.params.id}`;
-  console.log(message);
-  res.send(message);
+router.get('/:id', async (req, res) => {
+  const user = req.user;
+  // TODO make this validation everywhere, pretty much, or make user not optional?
+  if (!user) return res.status(400).end(); // is this actually 401?
+  const sheet = await sql`SELECT * FROM sheets WHERE id = ${req.params.id} AND user_id = ${user.id}`;
+  res.send(sheet[0]);
 })
 
 router.delete('/:id', async (req, res) => {
