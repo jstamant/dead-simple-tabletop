@@ -1,6 +1,6 @@
 import {Request, Response, NextFunction} from 'express'
 
-import { Secret } from 'jsonwebtoken'
+import jwt, { Secret } from 'jsonwebtoken'
 // TODO should throw an error if there's no secret set??
 const secret: Secret = process.env.SECRET || 'test'
 

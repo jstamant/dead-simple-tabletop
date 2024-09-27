@@ -4,20 +4,28 @@ const router = express.Router();
 import sql from '../../util/db'
 
 router.get('/', async (req, res) => {
-  console.log('getting games for user', req.user);
   const user = req.user;
   // TODO make this validation everywhere, pretty much, or make user not optional?
   if (!user) return res.status(400).end(); // is this actually 401?
-  const sheets = await sql`SELECT * FROM games WHERE user_id = ${user.id}`;
+  const sheets = await sql`
+SELECT *
+FROM games g
+JOIN games_users gu ON g.id = gu.game_id
+WHERE gu.user_id = ${user.id}`;
   res.send(sheets);
 })
 
 router.post('/', async (req, res) => {
-  console.log('creating a game');
   const user = req.user;
   // TODO make this validation everywhere, pretty much, or make user not optional?
   if (!user) return res.status(400).end(); // is this actually 401?
-  await sql`INSERT INTO games (user_id) VALUES (${user.id})`;
+  await sql`
+WITH new_game AS (
+INSERT INTO games (name) VALUES ('test')
+RETURNING id
+)
+INSERT INTO games_users (game_id, user_id)
+SELECT id, ${user.id} FROM new_game`
   res.send(true);
 })
 

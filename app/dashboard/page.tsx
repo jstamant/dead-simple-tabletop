@@ -13,20 +13,30 @@ interface Sheet {
     id: number,
     user_id: number
 }
+interface Game {
+    id: number,
+    name: string
+}
+
 
 export default function DashboardPage() {
     // TODO make a type for these
     const [sheets, setSheets] = useState<Sheet[]>([]);
-    /* const [games, setGames] = useState([]); */
+    const [games, setGames] = useState<Game[]>([]);
 
     useEffect(() => {
-        console.log("refreshing sheets on mount?")
+        console.log("refreshing sheets and games on mount?")
         // TODO should I check to see if sheets is empty, first?
         axios.get('/sheets').then((response) => setSheets(response.data));
+        axios.get('/games').then((response) => setGames(response.data));
     }, []);
 
     const handleAddSheet = () => {
         axios.post('/sheets');
+    }
+
+    const handleAddGame = () => {
+        axios.post('/games');
     }
 
     return (
@@ -37,7 +47,7 @@ export default function DashboardPage() {
                 <Button onPress={handleAddSheet}>Add/create sheet</Button>
                 <div className="flex">
                     {sheets.map((sheet) => {
-                        return <Card key={sheet.id}>
+                        return <Card key={sheet.id} className="m-4">
                             <CardHeader>sheet #{sheet.id}</CardHeader>
                             <CardBody>user_id{sheet.user_id}</CardBody>
                             <CardFooter>
@@ -49,8 +59,18 @@ export default function DashboardPage() {
             </div>
             <div>
                 <h1 className="text-2xl">Games</h1>
-                <Button>Add/create game</Button>
-                <Card>list of games</Card>
+                <Button onPress={handleAddGame}>Add/create game</Button>
+                <div className="flex">
+                    {games.map((game) => {
+                        return <Card key={game.id} className="m-4">
+                            <CardHeader>sheet #{game.id}</CardHeader>
+                            <CardBody>user_id{game.user_id}</CardBody>
+                            <CardFooter>
+                                <Link href={`/games/${game.id}`}><Button>goto {game.id}</Button></Link>
+                            </CardFooter>
+                        </Card>
+                    })}
+                </div>
                 <Link href="/game"><Button>goto game page (debug)</Button></Link>
             </div>
         </div>

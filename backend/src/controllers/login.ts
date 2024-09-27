@@ -1,7 +1,14 @@
 import express from 'express'
 const router = express.Router()
 
+import bcrypt from 'bcrypt'
+import jwt from 'jsonwebtoken'
+
 import sql from '../../util/db'
+
+import { Secret } from 'jsonwebtoken'
+// TODO should throw an error if there's no secret set??
+const secret: Secret = process.env.SECRET || 'test'
 
 router.post('/', async (req, res) => {
   const { username, password } = req.body
