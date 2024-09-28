@@ -20,9 +20,12 @@ app.use(cookieParser());
 // TODO process.env.NODE_ENV == 'test'
 app.use(express.json())
 
-import login from './controllers/login'
+// TODO Should I rename controller to authentication?
+import {login, logout} from './controllers/login'
 // TODO should the authentication be at the router level??
 app.use('/login', login);
+// TODO not implemented
+app.use('/logout', logout);
 
 import users from './controllers/users'
 app.use('/users', users)

@@ -17,6 +17,7 @@ Here's a general list of features I'd like to implement in this platform, roughl
 - Password login
 - Create character sheets
 - Create games/tables
+- Logout
 
 ### Next release
 - Create templates

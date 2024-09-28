@@ -1,5 +1,4 @@
-import express from 'express'
-const router = express.Router()
+import {Request, Response} from 'express'
 
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
@@ -10,7 +9,7 @@ import { Secret } from 'jsonwebtoken'
 // TODO should throw an error if there's no secret set??
 const secret: Secret = process.env.SECRET || 'test'
 
-router.post('/', async (req, res) => {
+export async function login(req: Request, res: Response) {
   const { username, password } = req.body
   // TODO there should be some validation at the start, here
   // I need to figure out how I want to do validation
@@ -40,8 +39,11 @@ router.post('/', async (req, res) => {
   //   sameSite: 'none',  // Prevent CSRF - nvm, bypassed with none, preffered to be set to 'strict'
   //   maxAge: 3600000  // 1 hour in milliseconds
   // });
-  res.send('')
+  res.cookie('userId', user.id)
+  res.send({ id: user.id });
   // res.status(200).json({ username: user.email, token });
-})
+}
 
-export default router
+export async function logout(req: Request, res: Response) {
+  res.send(true)
+}
