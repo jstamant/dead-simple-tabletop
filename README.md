@@ -18,6 +18,7 @@ Here's a general list of features I'd like to implement in this platform, roughl
 - Create character sheets
 - Create games/tables
 - Logout
+- changelog update online
 
 ### Next release
 - Create templates
@@ -26,11 +27,17 @@ Here's a general list of features I'd like to implement in this platform, roughl
 - In-game dice roller
 - Invite/add users to tables
 - Link sharing for tables - no sign-up required for players
+- changelog update online
 
 ### Future releases
 - Character sheet export to PDF
 - Payment and/or tipping
 - Sessions instead of per-request authentication?
+- Game access as guest
+- Permissions settings for guests and players
+- Sheet pages/tabs/sections
+- Online docs for usage of the platform
+- changelog update online
 
 ## Technologies
 
