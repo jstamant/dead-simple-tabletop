@@ -1,12 +1,11 @@
 'use client'
 import {useState} from 'react'
+import {useRouter} from 'next/navigation'
 
 import {Button} from "@nextui-org/button";
 import {Card, CardHeader, CardBody, CardFooter} from "@nextui-org/card";
 import {Divider} from "@nextui-org/divider";
 import {Input} from "@nextui-org/input";
-
-import {PressEvent} from '@react-types/shared'
 
 import axios from '../util/axios'
 
@@ -22,19 +21,20 @@ const setField = (setState: React.Dispatch<React.SetStateAction<string>>) => {
 export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const router = useRouter();
     // TODO need to implement email validation
     // TODO need to implement password validation
-    const handleCreateAccount = (e: PressEvent) => {
-        console.log(e)
-        console.log('creating user account clicked!')
+    const handleCreateAccount = () => {
         axios.post('/users', {username: email, password: password});
         clearFields();
+        // TODO implement the proper creation flow for this...
     }
-    const handleLogin = (e: PressEvent) => {
-        console.log(e)
-        console.log('login button clicked!')
-        axios.post('/login', {username: email, password: password});
-        clearFields();
+    const handleLogin = () => {
+        axios.post('/login', {username: email, password: password})
+             .then(() => {
+                 clearFields(); // TODO this is redundant if you're navigating away...
+                 router.push('/dashboard');
+             });
     }
     const clearFields = (): void => {
         setEmail('');

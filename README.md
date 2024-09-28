@@ -34,9 +34,9 @@ Here's a general list of features I'd like to implement in this platform, roughl
 
 ## Technologies
 
-On the frontend, I'll be using React and Next.js
+On the frontend, I'll be using React and Next.js. I'm also using Zustand for the store, as I find it simpler than Redux.
 
-On the backend, I'll be using Rust. Specifically, I'll be using axum, because it is tightly integrated with the Tokio project, an important async engine in Rust.
+On the backend, I'll be using Node, Express, and postgres.js.
 
 For the DBMS, I'll be using PostgreSQL.
 
