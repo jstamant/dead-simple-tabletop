@@ -37,4 +37,37 @@ router.delete('/:id', async (req, res) => {
   res.status(204).end();
 })
 
+router.get('/:id/fields', async (req, res) => {
+  const user = req.user;
+  // TODO make this validation everywhere, pretty much, or make user not optional?
+  if (!user) return res.status(400).end(); // is this actually 401?
+  const fields = await sql`
+SELECT sf.*
+FROM sheet_fields sf
+JOIN sheets s ON s.id = sf.sheet_id
+WHERE s.id = ${req.params.id}
+AND s.user_id = ${user.id}`;
+  res.send(fields);
+})
+
+router.post('/:id/fields', async (req, res) => {
+  const user = req.user;
+  // TODO make this validation everywhere, pretty much, or make user not optional?
+  if (!user) return res.status(400).end(); // is this actually 401?
+  const field = await sql`
+INSERT INTO sheet_fields (sheet_id, type_id)
+VALUES (${req.params.id}, 1)
+RETURNING *`;
+  res.send(field[0]);
+})
+
+router.delete('/:id/fields/:field', async (req, res) => {
+  const user = req.user;
+  // TODO make this validation everywhere, pretty much, or make user not optional?
+  if (!user) return res.status(400).end(); // is this actually 401?
+  // TODO implement sheet id and user to prevent deleting ANY field
+  await sql`DELETE FROM sheet_fields WHERE id = ${req.params.field}`;
+  res.status(204).end();
+})
+
 export default router;
