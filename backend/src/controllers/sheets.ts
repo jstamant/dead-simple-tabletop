@@ -4,7 +4,6 @@ const router = express.Router();
 import sql from '../../util/db'
 
 router.get('/', async (req, res) => {
-  console.log('getting sheets user', req.user);
   const user = req.user;
   // TODO make this validation everywhere, pretty much, or make user not optional?
   if (!user) return res.status(400).end(); // is this actually 401?
@@ -16,7 +15,8 @@ router.post('/', async (req, res) => {
   const user = req.user;
   // TODO make this validation everywhere, pretty much, or make user not optional?
   if (!user) return res.status(400).end(); // is this actually 401?
-  const sheet = await sql`INSERT INTO sheets (user_id) VALUES (${user.id}) RETURNING *`;
+  const defaultSheetName = `Character${Math.floor(Math.random()*100)}`
+  const sheet = await sql`INSERT INTO sheets (user_id, title) VALUES (${user.id}, ${defaultSheetName}) RETURNING *`;
   res.send(sheet[0]);
 })
 
@@ -37,36 +37,36 @@ router.delete('/:id', async (req, res) => {
   res.status(204).end();
 })
 
-router.get('/:id/fields', async (req, res) => {
+router.get('/:id/elements', async (req, res) => {
   const user = req.user;
   // TODO make this validation everywhere, pretty much, or make user not optional?
   if (!user) return res.status(400).end(); // is this actually 401?
-  const fields = await sql`
+  const elements = await sql`
 SELECT sf.*
-FROM sheet_fields sf
+FROM sheet_elements sf
 JOIN sheets s ON s.id = sf.sheet_id
 WHERE s.id = ${req.params.id}
 AND s.user_id = ${user.id}`;
-  res.send(fields);
+  res.send(elements);
 })
 
-router.post('/:id/fields', async (req, res) => {
+router.post('/:id/elements', async (req, res) => {
   const user = req.user;
   // TODO make this validation everywhere, pretty much, or make user not optional?
   if (!user) return res.status(400).end(); // is this actually 401?
-  const field = await sql`
-INSERT INTO sheet_fields (sheet_id, type_id)
+  const element = await sql`
+INSERT INTO sheet_elements (sheet_id, type_id)
 VALUES (${req.params.id}, 1)
 RETURNING *`;
-  res.send(field[0]);
+  res.send(element[0]);
 })
 
-router.delete('/:id/fields/:field', async (req, res) => {
+router.delete('/:id/elements/:element', async (req, res) => {
   const user = req.user;
   // TODO make this validation everywhere, pretty much, or make user not optional?
   if (!user) return res.status(400).end(); // is this actually 401?
-  // TODO implement sheet id and user to prevent deleting ANY field
-  await sql`DELETE FROM sheet_fields WHERE id = ${req.params.field}`;
+  // TODO implement sheet id and user to prevent deleting ANY element
+  await sql`DELETE FROM sheet_elements WHERE id = ${req.params.element}`;
   res.status(204).end();
 })
 

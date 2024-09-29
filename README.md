@@ -28,6 +28,7 @@ Here's a general list of features I'd like to implement in this platform, roughl
 - Invite/add users to tables
 - Link sharing for tables - no sign-up required for players
 - changelog update online
+- limits on number of sheet elements?
 
 ### Future releases
 - Character sheet export to PDF
