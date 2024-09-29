@@ -7,7 +7,7 @@ import Link from 'next/link'
 import {Button} from '@nextui-org/button'
 import {Card, CardHeader, CardBody, CardFooter} from '@nextui-org/card'
 
-import axios from '../../util/axios'
+import axios from '@/util/axios'
 
 interface Sheet {
     id: number,

@@ -12,7 +12,7 @@ import { mdiDelete } from '@mdi/js'
 import { mdiDrag } from '@mdi/js'
 import { mdiPlus } from '@mdi/js'
 
-import axios from '../../../util/axios'
+import axios from '@/util/axios'
 
 // TODO should this use a hard id, or a user-specific id?
 
