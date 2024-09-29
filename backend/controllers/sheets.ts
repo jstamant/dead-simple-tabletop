@@ -1,7 +1,7 @@
 import express from 'express';
 const router = express.Router();
 
-import sql from '../../util/db'
+import sql from '../util/db'
 
 router.get('/', async (req, res) => {
   const user = req.user;

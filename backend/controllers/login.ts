@@ -3,7 +3,7 @@ import {Request, Response} from 'express'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 
-import sql from '../../util/db'
+import sql from '../util/db'
 
 import { Secret } from 'jsonwebtoken'
 // TODO should throw an error if there's no secret set??

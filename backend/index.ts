@@ -7,8 +7,8 @@ import express from 'express'
 import 'express-async-errors';
 
 // TODO consider moving util to the src folder??? and will need to remove from tsc settings
-import {authentication} from '../util/authentication'
-import errorHandler from '../util/errorHandler'
+import {authentication} from './util/authentication'
+import errorHandler from './util/errorhandler'
 
 const port = process.env.PORT || 3001
 

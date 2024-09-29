@@ -2,7 +2,7 @@ import express from 'express'
 const router = express.Router()
 
 import bcrypt from 'bcrypt'
-import sql from '../../util/db'
+import sql from '../util/db'
 
 // TODO this endpoint is still rough
 router.post('/users', async (req, res) => {
