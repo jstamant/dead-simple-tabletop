@@ -8,6 +8,7 @@ import 'express-async-errors';
 
 // TODO consider moving util to the src folder??? and will need to remove from tsc settings
 import {authentication} from '../util/authentication'
+import errorHandler from '../util/errorHandler'
 
 const port = process.env.PORT || 3001
 
@@ -39,6 +40,8 @@ import games from './controllers/games'
 // TODO should the authentication be at the router level??
 app.use('/games', authentication);
 app.use('/games', games);
+
+app.use(errorHandler);
 
 // TODO consider moving most of this into an app.ts file
 app.listen(port, () => {
