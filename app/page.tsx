@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import {Button} from '@nextui-org/button'
+import { Button } from '@nextui-org/button';
 
 export default function RootPage() {
   return (

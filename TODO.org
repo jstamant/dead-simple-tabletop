@@ -1,0 +1,21 @@
+#+title: TODO list
+
+- [ ] implement db
+- [ ] implement deploy action
+
+- [ ] implement jwt expiry and/or cookie expiry
+- [ ] change function() to es6 style?
+- [ ] handle duplicating emails?
+- [ ] look into Postgres transactions, and see if postgres.js is wrapping in transactions
+
+- email verification with nodemailer
+- refresh token, or implement sessions
+- mdi icons, and add to readme
+- Fix semantic element layout on entire platform (main, header, footer, etc)
+- get backend to use @ for imports (not an easy TS setup)
+- add sql script to project
+
+- [ ] Prettier setup, and format everything
+- [ ] consider changing imports to requires? log the difference between esm modules and ?
+- [ ] change backend jwt secret?
+- [ ] Add license to project?
